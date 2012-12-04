@@ -17,6 +17,7 @@
 package com.gwtplatform.inject.errai.client;
 
 import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.Event;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.inject.errai.client.deffered.*;
@@ -57,8 +58,8 @@ public class ProxyManager {
     static Map<Class<? extends Presenter<?, ?>>, Proxy> proxies = new HashMap<Class<? extends Presenter<?, ?>>, Proxy>();
     static Map<Class<? extends Presenter<?, ?>>, ProxyPlace> proxiesPlaces = new HashMap<Class<? extends Presenter<?, ?>>, ProxyPlace>();
 
-    public static <P extends Presenter<?, ?>> DefferedProxyImpl<P> registerProxy(ProxyImpl<P> proxy){
-        DefferedProxyImpl<P> e = new DefferedProxyImpl<P>(proxy, proxy.getPresenterClass());
+    public static <P extends Presenter<?, ?>> DefferedProxyImpl<P> registerProxy(ProxyImpl<P> proxy, Class<P> presenterClass){
+        DefferedProxyImpl<P> e = new DefferedProxyImpl<P>(proxy, presenterClass);
         defferedProxies.add(e);
         if (instance != null)
             instance.registerDefferedProxy(e);

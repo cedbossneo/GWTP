@@ -19,15 +19,10 @@
 <module>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
-  <inherits name="com.google.gwt.inject.Inject" />
 
   <!-- Inherit shared modules -->
   <inherits name='com.gwtplatform.common.ClientsCommon'/>
 
-  <generate-with class="com.gwtplatform.mvp.rebind.ProxyGenerator">
-    <when-type-assignable class="com.gwtplatform.mvp.client.proxy.Proxy" />
-  </generate-with>
-  
   <!-- Specify the paths for translatable code                    -->
   <source path='client' excludes="**/*Test.java,**/*TestSuite.java,**/*TestUtil.java" />
 

@@ -14,40 +14,40 @@
  * the License.
  */
 
-package com.gwtplatform.mvp.client.gwt.mvp;
+package com.gwtplatform.inject.gin.client;
 
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
+import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
-import com.google.inject.name.Names;
 import com.gwtplatform.mvp.client.RootPresenter;
-import com.gwtplatform.inject.gin.client.AbstractPresenterModule;
+import com.gwtplatform.mvp.client.googleanalytics.GoogleAnalytics;
+import com.gwtplatform.mvp.client.googleanalytics.GoogleAnalyticsImpl;
 import com.gwtplatform.mvp.client.proxy.ParameterTokenFormatter;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
 
 /**
- * @author Philippe Beaudoin
+ * Module with default GWTP bindings. You can
+ * {@code install(new DefaultModule(MyPlaceManager.class))}
+ * instead of manually binding the different classes to their default implementation.
+ *
+ * @author Christian Goudreau
  */
-public class ClientModuleTestUtilGwt extends AbstractPresenterModule {
+public class DefaultModule extends AbstractGinModule {
+
+  private final Class<? extends PlaceManager> placeManagerClass;
+
+  public DefaultModule(Class<? extends PlaceManager> placeManagerClass) {
+    this.placeManagerClass = placeManagerClass;
+  }
+
   @Override
   protected void configure() {
-    // Singletons
     bind(EventBus.class).to(SimpleEventBus.class).in(Singleton.class);
-    bind(PlaceManager.class).to(PlaceManagerTestUtilGwt.class).in(
-        Singleton.class);
-    bind(TokenFormatter.class).to(ParameterTokenFormatter.class).in(
-        Singleton.class);
+    bind(TokenFormatter.class).to(ParameterTokenFormatter.class).in(Singleton.class);
     bind(RootPresenter.class).asEagerSingleton();
-
-    // Presenters
-    bindPresenter(MainPresenterTestUtilGwt.class, MainPresenterTestUtilGwt.MyView.class,
-        MainViewTestUtilGwt.class, MainPresenterTestUtilGwt.MyProxy.class);
-    bindPresenter(AdminPresenterTestUtilGwt.class, AdminPresenterTestUtilGwt.MyView.class,
-        AdminViewTestUtilGwt.class, AdminPresenterTestUtilGwt.MyProxy.class);
-
-    // For testing
-    bind(InstantiationCounterTestUtilGwt.class).asEagerSingleton();
-    bindConstant().annotatedWith(Names.named("notice")).to("Hello");
+    bind(GoogleAnalytics.class).to(GoogleAnalyticsImpl.class).in(Singleton.class);
+    bind(PlaceManager.class).to(placeManagerClass).in(Singleton.class);
   }
 }

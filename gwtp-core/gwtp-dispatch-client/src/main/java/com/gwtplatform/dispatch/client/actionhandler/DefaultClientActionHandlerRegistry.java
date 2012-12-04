@@ -16,13 +16,13 @@
 
 package com.gwtplatform.dispatch.client.actionhandler;
 
-import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Provider;
 
 import com.gwtplatform.common.client.CodeSplitBundleProvider;
 import com.gwtplatform.common.client.IndirectProvider;
 import com.gwtplatform.common.client.ProviderBundle;
+import com.gwtplatform.common.client.injector.AsyncProvider;
 import com.gwtplatform.dispatch.shared.Action;
 import com.gwtplatform.dispatch.shared.Result;
 

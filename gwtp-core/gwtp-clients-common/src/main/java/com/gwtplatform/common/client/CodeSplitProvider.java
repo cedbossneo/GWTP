@@ -16,8 +16,8 @@
 
 package com.gwtplatform.common.client;
 
-import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.gwtplatform.common.client.injector.AsyncProvider;
 
 /**
  * An {@link IndirectProvider} that gets the object using code splitting and

@@ -1,0 +1,11 @@
+<module>
+    <!-- Inherit the core Web Toolkit stuff.                        -->
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name="com.google.gwt.inject.Inject" />
+    <inherits name="com.gwtplatform.mvp.Mvp"/>
+
+    <generate-with class="rebind.ProxyGenerator">
+        <when-type-assignable class="com.gwtplatform.mvp.client.proxy.Proxy" />
+    </generate-with>
+
+</module>
