@@ -17,6 +17,7 @@
 package com.gwtplatform.inject.errai.client;
 
 import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.Event;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.inject.errai.client.deffered.*;

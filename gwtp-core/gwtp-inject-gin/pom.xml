@@ -12,5 +12,10 @@
     <artifactId>gwtp-inject-gin</artifactId>
     <name>GWTP Injection, Gin implementation</name>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.google.gwt.inject</groupId>
+            <artifactId>gin</artifactId>
+        </dependency>
+    </dependencies>
 </project>
