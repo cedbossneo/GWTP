@@ -18,7 +18,7 @@ package com.gwtplatform.mvp.client.gwt.mvp;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
-import com.gwtplatform.mvp.client.DelayedBindRegistry;
+import com.gwtplatform.inject.gin.client.DelayedBindRegistry;
 
 /**
  * Integration test for various components of GWTP's MVP module.

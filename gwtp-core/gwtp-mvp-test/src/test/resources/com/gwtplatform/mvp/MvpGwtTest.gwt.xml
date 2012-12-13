@@ -28,8 +28,9 @@
   <!-- the theme of your GWT application by uncommenting          -->
   <!-- any one of the following lines.                            -->
   <inherits name='com.google.gwt.user.theme.standard.Standard'/>
-  
-  <!-- Specify the paths for translatable code                    -->
+    <inherits name="com.gwtplatform.inject.gin.Gin"/>
+
+    <!-- Specify the paths for translatable code                    -->
   <source path='client' excludes="**/*Test.java,**/*TestSuite.java,**/*TestUtil.java" />
 
   <!-- This is required for Gwt-Platform Proxy's generator        -->

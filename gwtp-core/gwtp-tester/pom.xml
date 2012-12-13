@@ -26,11 +26,6 @@
             <artifactId>gwtp-dispatch-server</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.gwtplatform</groupId>
-            <artifactId>gwtp-inject-gin</artifactId>
-            <version>0.8-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
         </dependency>

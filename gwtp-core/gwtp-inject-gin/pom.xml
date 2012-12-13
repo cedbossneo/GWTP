@@ -26,7 +26,6 @@
         <dependency>
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp-mvp-client</artifactId>
-            <version>0.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.google.gwt.inject</groupId>
