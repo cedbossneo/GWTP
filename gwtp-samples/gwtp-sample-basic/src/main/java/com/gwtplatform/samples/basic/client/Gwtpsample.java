@@ -19,7 +19,7 @@ package com.gwtplatform.samples.basic.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 
-import com.gwtplatform.mvp.client.DelayedBindRegistry;
+import com.gwtplatform.inject.gin.client.DelayedBindRegistry;
 
 /**
  * @author Philippe Beaudoin

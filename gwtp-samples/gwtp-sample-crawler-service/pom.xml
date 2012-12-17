@@ -132,6 +132,10 @@
                     <groupId>${project.groupId}</groupId>
                     <artifactId>gwtp-crawler-service</artifactId>
                 </dependency>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>gwtp-inject-gin</artifactId>
+                </dependency>
             </dependencies>
         </profile>
 

@@ -169,6 +169,10 @@
                 </dependency>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
+                    <artifactId>gwtp-inject-gin</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
                     <artifactId>gwtp-processors</artifactId>
                 </dependency>
             </dependencies>

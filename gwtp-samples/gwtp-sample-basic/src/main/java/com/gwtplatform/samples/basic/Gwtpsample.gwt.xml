@@ -35,8 +35,9 @@
 	
   <inherits name='com.gwtplatform.dispatch.Dispatch' />
   <inherits name='com.gwtplatform.mvp.Mvp' />
-	
-  <!-- Specify the paths for translatable code                    -->
+    <inherits name="com.gwtplatform.inject.gin.Gin"/>
+
+    <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
   <source path='shared'/>
 

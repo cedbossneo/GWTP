@@ -46,8 +46,14 @@ public class DefferedProxyPlace<P extends Presenter<?, ?>> implements DefferedPr
 
     @Override
     public Proxy makeProxy(EventBus eventBus, PlaceManager placeManager) {
-        ProxyPlaceImpl proxyPlace = new ProxyPlaceImpl<P>(ProxyManager.getPresenterProxy(presenterClass), new PlaceImpl(token));
-        proxyPlace.bind(placeManager, eventBus);
-        return proxyPlace;
+        return new DynamicProxyPlace<P>(ProxyManager.getPresenterProxy(presenterClass), eventBus, placeManager);
+    }
+
+    private class DynamicProxyPlace<P extends Presenter<?, ?>> extends ProxyPlaceImpl<P> {
+        public DynamicProxyPlace(Proxy<P> presenterProxy, EventBus eventBus, PlaceManager placeManager) {
+            super.setPlace(new PlaceImpl(token));
+            super.setProxy(presenterProxy);
+            bind(placeManager, eventBus);
+        }
     }
 }

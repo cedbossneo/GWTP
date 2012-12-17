@@ -54,8 +54,14 @@ public class DefferedGateKeeperProxyPlace<P extends Presenter<?, ?>> implements 
 
     @Override
     public Proxy makeProxy(EventBus eventBus, PlaceManager placeManager) {
-        ProxyPlaceImpl proxyPlace = new ProxyPlaceImpl<P>(ProxyManager.getPresenterProxy(presenterClass), new PlaceWithGatekeeper(token, IOC.getBeanManager().lookupBean(gateKeeper).getInstance()));
-        proxyPlace.bind(placeManager, eventBus);
-        return proxyPlace;
+        return new DynamicGateKeeperProxyPlace<P>(ProxyManager.getPresenterProxy(presenterClass), IOC.getBeanManager().lookupBean(gateKeeper).getInstance(), eventBus, placeManager);
+    }
+
+    private class DynamicGateKeeperProxyPlace<P extends Presenter<?, ?>> extends ProxyPlaceImpl<P> {
+        public DynamicGateKeeperProxyPlace(Proxy<P> presenterProxy, Gatekeeper gatekeeper, EventBus eventBus, PlaceManager placeManager) {
+            super.setPlace(new PlaceWithGatekeeper(token, gatekeeper));
+            super.setProxy(presenterProxy);
+            bind(placeManager, eventBus);
+        }
     }
 }

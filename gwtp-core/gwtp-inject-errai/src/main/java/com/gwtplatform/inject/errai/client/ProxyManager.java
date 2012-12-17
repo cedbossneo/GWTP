@@ -25,14 +25,12 @@ import com.gwtplatform.inject.errai.client.deffered.DefferedEventImpl;
 import com.gwtplatform.inject.errai.client.deffered.DefferedGateKeeperProxyPlace;
 import com.gwtplatform.inject.errai.client.deffered.DefferedHandler;
 import com.gwtplatform.inject.errai.client.deffered.DefferedProxy;
-import com.gwtplatform.inject.errai.client.deffered.DefferedProxyImpl;
 import com.gwtplatform.inject.errai.client.deffered.DefferedProxyPlace;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.proxy.Gatekeeper;
 import com.gwtplatform.mvp.client.proxy.NotifyingAsyncCallback;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.Proxy;
-import com.gwtplatform.mvp.client.proxy.ProxyImpl;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import org.jboss.errai.ioc.client.container.IOCBeanDef;
 import org.jboss.errai.ioc.client.container.IOCBeanManager;
@@ -63,15 +61,6 @@ public class ProxyManager {
     static List<DefferedEvent> defferedEvents = new LinkedList<DefferedEvent>();
     static Map<Class<? extends Presenter<?, ?>>, Proxy> proxies = new HashMap<Class<? extends Presenter<?, ?>>, Proxy>();
     static Map<Class<? extends Presenter<?, ?>>, ProxyPlace> proxiesPlaces = new HashMap<Class<? extends Presenter<?, ?>>, ProxyPlace>();
-
-    public static <P extends Presenter<?, ?>> DefferedProxyImpl<P> registerProxy(ProxyImpl<P> proxy, Class<P> presenterClass) {
-        DefferedProxyImpl<P> e = new DefferedProxyImpl<P>(proxy, presenterClass);
-        defferedProxies.add(e);
-        if (instance != null) {
-            instance.registerDefferedProxy(e);
-        }
-        return e;
-    }
 
     public static <P extends Presenter<?, ?>> DefferedContentHandler<P> registerHandler(GwtEvent.Type type, Class<P> presenterClass) {
         DefferedContentHandler<P> handler = new DefferedContentHandler<P>(type, presenterClass);
