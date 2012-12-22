@@ -16,18 +16,17 @@
 
 package com.gwtplatform.dispatch.annotation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
 import com.google.web.bindery.requestfactory.shared.ValueProxy;
 import com.gwtplatform.dispatch.annotation.proxy.AddressProxy;
 import com.gwtplatform.dispatch.annotation.proxy.EmployeeProxy;
+import org.junit.Test;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * This test is being run by ant, but is not run in eclipse.

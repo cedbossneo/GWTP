@@ -88,7 +88,7 @@ public class PlaceManagerImplTest {
     @Inject
     public DummyProxyBasic(Provider<DummyPresenterBasic> presenter) {
         this.presenter = new StandardProvider<DummyPresenterBasic>(presenter);
-    };
+    }
   }
 
   abstract static class ProxyPlaceBase<P extends Presenter<?,?>> extends ProxyPlaceImpl<P> {
@@ -101,9 +101,9 @@ public class PlaceManagerImplTest {
         super.setPlace(place);
         super.setProxy(proxy);
         this.deferredCommandManager = deferredCommandManager;
-    };
+    }
 
-    @Override
+      @Override
     void addDeferredCommand(Command command) {
       deferredCommandManager.addCommand(command);
     }
@@ -155,7 +155,7 @@ public class PlaceManagerImplTest {
     @Inject
     public DummyProxyRedirect(Provider<DummyPresenterRedirect> presenter) {
         this.presenter = new StandardProvider<DummyPresenterRedirect>(presenter);
-    };
+    }
   }
 
   @TestEagerSingleton
@@ -197,7 +197,7 @@ public class PlaceManagerImplTest {
     @Inject
     public DummyProxyRedirectNoHistory(Provider<DummyPresenterRedirectNoHistory> presenter) {
         this.presenter = new StandardProvider<DummyPresenterRedirectNoHistory>(presenter);
-    };
+    }
   }
 
   @TestEagerSingleton
@@ -219,7 +219,7 @@ public class PlaceManagerImplTest {
     public void onNavigation(NavigationEvent navigationEvent) {
       navCount++;
       lastEvent = navigationEvent;
-    };
+    }
   }
 
   // SUT

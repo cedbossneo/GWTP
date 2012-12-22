@@ -16,9 +16,9 @@
         <module>gwtp-all</module>
         <module>gwtp-clients-common</module>
         <module>gwtp-mvp-client</module>
-        <module>gwtp-mvp-test</module>
         <module>gwtp-inject-errai</module>
         <module>gwtp-inject-gin</module>
+        <module>gwtp-mvp-test</module>
         <module>gwtp-dispatch-client</module>
         <module>gwtp-dispatch-shared</module>
         <module>gwtp-dispatch-server</module>

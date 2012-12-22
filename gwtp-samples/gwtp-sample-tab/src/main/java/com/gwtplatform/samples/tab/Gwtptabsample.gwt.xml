@@ -6,8 +6,8 @@
   <inherits name='com.google.gwt.user.User'/>
   <inherits name="com.google.gwt.uibinder.GinUiBinder" /> <!-- GinUiBinder allows injecting widgets in UiBinder -->
   <inherits name="com.google.gwt.inject.Inject" />
-  
-  <inherits name="com.gwtplatform.mvp.Mvp" />
+
+    <inherits name='com.gwtplatform.inject.gin.Gin' />
 
   <!-- Inherit the default GWT style sheet.  You can change       -->
   <!-- the theme of your GWT application by uncommenting          -->

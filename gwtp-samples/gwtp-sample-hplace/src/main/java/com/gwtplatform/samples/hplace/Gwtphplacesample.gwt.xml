@@ -8,7 +8,7 @@
   <inherits name="com.google.gwt.inject.Inject" />
   
   <inherits name='com.gwtplatform.dispatch.Dispatch' />
-  <inherits name="com.gwtplatform.mvp.Mvp" />
+    <inherits name='com.gwtplatform.inject.gin.Gin' />
 
   <!-- Inherit the default GWT style sheet.  You can change       -->
   <!-- the theme of your GWT application by uncommenting          -->

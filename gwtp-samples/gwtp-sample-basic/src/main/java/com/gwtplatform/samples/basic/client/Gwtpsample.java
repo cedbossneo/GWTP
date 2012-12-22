@@ -16,21 +16,19 @@
 
 package com.gwtplatform.samples.basic.client;
 
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
+import org.jboss.errai.ioc.client.api.EntryPoint;
 
-import com.gwtplatform.inject.gin.client.DelayedBindRegistry;
+import javax.inject.Inject;
 
 /**
  * @author Philippe Beaudoin
  */
-public class Gwtpsample implements EntryPoint {
-  public final MyGinjector ginjector = GWT.create(MyGinjector.class);
+@EntryPoint
+public class Gwtpsample {
+    @Inject
+    MyPlaceManager placeManager;
 
-  public void onModuleLoad() {
-
-    DelayedBindRegistry.bind(ginjector);
-
-    ginjector.getPlaceManager().revealCurrentPlace();
-  }
+    public void onModuleLoad() {
+        placeManager.revealCurrentPlace();
+    }
 }

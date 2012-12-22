@@ -132,7 +132,7 @@
                 </dependency>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
-                    <artifactId>gwtp-inject-gin</artifactId>
+                    <artifactId>gwtp-inject-errai</artifactId>
                 </dependency>
                 <dependency>
                     <groupId>${project.groupId}</groupId>

@@ -4,7 +4,9 @@
     <inherits name="com.google.gwt.inject.Inject" />
     <inherits name="com.gwtplatform.mvp.Mvp"/>
 
-    <generate-with class="rebind.ProxyGenerator">
+    <source path="client"/>
+
+    <generate-with class="com.gwtplatform.inject.gin.rebind.ProxyGenerator">
         <when-type-assignable class="com.gwtplatform.mvp.client.proxy.Proxy" />
     </generate-with>
 
