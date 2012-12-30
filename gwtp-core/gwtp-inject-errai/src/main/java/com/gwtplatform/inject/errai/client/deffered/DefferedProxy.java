@@ -31,5 +31,5 @@ import com.gwtplatform.mvp.client.proxy.Proxy;
 public interface DefferedProxy<P extends Presenter<?, ?>> {
     Proxy makeProxy(EventBus eventBus, PlaceManager placeManager);
 
-    Class<P> getPresenterClass();
+    Class<? extends Proxy<P>> getProxyClass();
 }

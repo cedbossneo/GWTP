@@ -17,12 +17,12 @@
 package com.gwtplatform.inject.errai.client.deffered;
 
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.inject.errai.client.ProxyManager;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.proxy.PlaceImpl;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.Proxy;
 import com.gwtplatform.mvp.client.proxy.ProxyPlaceImpl;
+import org.jboss.errai.ioc.client.container.IOC;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,20 +33,21 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlaceImpl;
  */
 public class DefferedProxyPlace<P extends Presenter<?, ?>> implements DefferedProxy<P> {
     private final String token;
-    private final Class<P> presenterClass;
+    private final Class<? extends Proxy<P>> proxyClass;
 
-    public DefferedProxyPlace(String token, Class<P> presenterClass) {
+    public DefferedProxyPlace(String token, Class<? extends Proxy<P>> proxyClass) {
         this.token = token;
-        this.presenterClass = presenterClass;
-    }
-
-    public Class<P> getPresenterClass() {
-        return presenterClass;
+        this.proxyClass = proxyClass;
     }
 
     @Override
     public Proxy makeProxy(EventBus eventBus, PlaceManager placeManager) {
-        return new DynamicProxyPlace<P>(ProxyManager.getPresenterProxy(presenterClass), eventBus, placeManager);
+        return new DynamicProxyPlace<P>(IOC.getBeanManager().lookupBean(proxyClass).getInstance(), eventBus, placeManager);
+    }
+
+    @Override
+    public Class<? extends Proxy<P>> getProxyClass() {
+        return proxyClass;
     }
 
     private class DynamicProxyPlace<P extends Presenter<?, ?>> extends ProxyPlaceImpl<P> {

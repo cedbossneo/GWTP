@@ -75,50 +75,52 @@ public class ProxyManagerIOCExtension implements IOCExtensionConfigurator {
     @Override
     public void afterInitialization(IOCProcessingContext context, InjectionContext injectionContext, IOCProcessorFactory procFactory) {
         final BlockStatement instanceInitializer = context.getBootstrapClass().getInstanceInitializer();
-        for (MetaClass klass : ClassScanner.getSubTypesOf(MetaClassFactory.get(Proxy.class))) {
-            if (!klass.isInterface() || (!klass.isAnnotationPresent(ProxyStandard.class) && !klass.isAnnotationPresent(ProxyCodeSplit.class) && !klass.isAnnotationPresent(ProxyCodeSplitBundle.class))) {
+        for (MetaClass proxyClass : ClassScanner.getSubTypesOf(MetaClassFactory.get(Proxy.class))) {
+            if (!proxyClass.isInterface() || (!proxyClass.isAnnotationPresent(ProxyStandard.class) && !proxyClass.isAnnotationPresent(ProxyCodeSplit.class) && !proxyClass.isAnnotationPresent(ProxyCodeSplitBundle.class))) {
                 continue;
             }
-            ClassDefinitionBuilderAbstractOption<? extends ClassStructureBuilder<?>> proxy = createProxy(klass);
-            for (MetaMethod method : klass.getMethodsAnnotatedWith(ProxyEvent.class)) {
+            MetaParameterizedType presenterType = getPresenterFromProxy(proxyClass);
+            MetaClass presenterClass = (MetaClass) presenterType.getTypeParameters()[0];
+            ClassDefinitionBuilderAbstractOption<? extends ClassStructureBuilder<?>> proxy = createProxy(proxyClass, presenterType, presenterClass);
+            InnerClass finalProxyClass = new InnerClass(proxy.body().getClassDefinition());
+
+            for (MetaMethod method : presenterClass.getMethodsAnnotatedWith(ProxyEvent.class)) {
                 MetaParameter event = method.getParameters()[0];
-                createMethod(injectionContext, getHandler(klass, method.getName(), event.getType()), klass, proxy, method.getReturnType(), method.getName(), event);
+                createMethod(injectionContext, getHandler(presenterClass, method.getName(), event.getType()), presenterClass, proxy, method.getReturnType(), method.getName(), event);
                 MetaMethod staticMethod = event.getType().getBestMatchingStaticMethod("getType", new Class[]{});
                 if (staticMethod == null) {
-                    instanceInitializer.addStatement(Stmt.invokeStatic(ProxyManager.class, "registerEvent", InjectUtil.invokePublicOrPrivateMethod(injectionContext, Stmt.newObject(event.getType()), event.getType().getBestMatchingMethod("getAssociatedType", new Class[]{})), klass));
+                    instanceInitializer.addStatement(Stmt.invokeStatic(ProxyManager.class, "registerEvent", InjectUtil.invokePublicOrPrivateMethod(injectionContext, Stmt.newObject(event.getType()), event.getType().getBestMatchingMethod("getAssociatedType", new Class[]{})), finalProxyClass.getType()));
                 } else {
-                    instanceInitializer.addStatement(Stmt.invokeStatic(ProxyManager.class, "registerEvent", Stmt.invokeStatic(event.getType(), staticMethod.getName()), klass));
+                    instanceInitializer.addStatement(Stmt.invokeStatic(ProxyManager.class, "registerEvent", Stmt.invokeStatic(event.getType(), staticMethod.getName()), finalProxyClass.getType()));
                 }
             }
-            InnerClass finalProxyClass = new InnerClass(proxy.body().getClassDefinition());
             context.getBootstrapClass().addInnerClass(finalProxyClass);
-            instanceInitializer.addStatement(Stmt.invokeStatic(ProxyManager.class, "registerProxy", finalProxyClass.getType(), klass));
-            for (MetaMethod method : klass.getMethodsAnnotatedWith(ContentSlot.class)) {
+            for (MetaMethod method : presenterClass.getMethodsAnnotatedWith(ContentSlot.class)) {
                 if (!method.isStatic()) {
                     continue;
                 }
-                instanceInitializer.addStatement(Stmt.invokeStatic(ProxyManager.class, "registerHandler", Stmt.invokeStatic(klass, method.getName()), klass));
+                instanceInitializer.addStatement(Stmt.invokeStatic(ProxyManager.class, "registerHandler", Stmt.invokeStatic(presenterClass, method.getName()), finalProxyClass.getType()));
             }
-        }
 
-        Class<? extends Gatekeeper> defaultGateKeeper = null;
-        Collection<MetaClass> defaultGatekeeperClasses = ClassScanner.getTypesAnnotatedWith(DefaultGatekeeper.class);
-        if (defaultGatekeeperClasses.size() > 0) {
-            Class<? extends Gatekeeper> aClass = (Class<? extends Gatekeeper>) defaultGatekeeperClasses.iterator().next().asClass();
-            defaultGateKeeper = aClass;
-        }
+            Class<? extends Gatekeeper> defaultGateKeeper = null;
+            Collection<MetaClass> defaultGatekeeperClasses = ClassScanner.getTypesAnnotatedWith(DefaultGatekeeper.class);
+            if (defaultGatekeeperClasses.size() > 0) {
+                Class<? extends Gatekeeper> aClass = (Class<? extends Gatekeeper>) defaultGatekeeperClasses.iterator().next().asClass();
+                defaultGateKeeper = aClass;
+            }
 
-        for (MetaClass klass : ClassScanner.getTypesAnnotatedWith(NameToken.class)) {
-            boolean useGateKeeper = klass.isAnnotationPresent(UseGatekeeper.class);
-            if (useGateKeeper || (defaultGateKeeper != null && !klass.isAnnotationPresent(NoGatekeeper.class))) {
-                Class<? extends Gatekeeper> gateKeeper = defaultGateKeeper;
-                if (useGateKeeper) {
-                    Class<? extends Gatekeeper> value = klass.getAnnotation(UseGatekeeper.class).value();
-                    gateKeeper = (value != null) ? value : gateKeeper;
+            if (proxyClass.isAnnotationPresent(NameToken.class)) {
+                boolean useGateKeeper = proxyClass.isAnnotationPresent(UseGatekeeper.class);
+                if (useGateKeeper || (defaultGateKeeper != null && !proxyClass.isAnnotationPresent(NoGatekeeper.class))) {
+                    Class<? extends Gatekeeper> gateKeeper = defaultGateKeeper;
+                    if (useGateKeeper) {
+                        Class<? extends Gatekeeper> value = proxyClass.getAnnotation(UseGatekeeper.class).value();
+                        gateKeeper = (value != null) ? value : gateKeeper;
+                    }
+                    instanceInitializer.addStatement(Stmt.invokeStatic(ProxyManager.class, "registerPlace", proxyClass.getAnnotation(NameToken.class).value(), finalProxyClass.getType(), gateKeeper));
+                } else {
+                    instanceInitializer.addStatement(Stmt.invokeStatic(ProxyManager.class, "registerPlace", proxyClass.getAnnotation(NameToken.class).value(), finalProxyClass.getType()));
                 }
-                instanceInitializer.addStatement(Stmt.invokeStatic(ProxyManager.class, "registerPlace", klass.getAnnotation(NameToken.class).value(), getPresenterFromProxy(klass).getTypeParameters()[0], gateKeeper));
-            } else {
-                instanceInitializer.addStatement(Stmt.invokeStatic(ProxyManager.class, "registerPlace", klass.getAnnotation(NameToken.class).value(), getPresenterFromProxy(klass).getTypeParameters()[0]));
             }
         }
     }
@@ -149,13 +151,11 @@ public class ProxyManagerIOCExtension implements IOCExtensionConfigurator {
         return Stmt.newObject(callbackClass).extend(Stmt.loadVariable("this").invoke("getEventBus")).publicOverridesMethod("success", presenter).append(Stmt.loadVariable(presenter.getName()).invoke(name, Refs.get(parameter.getName()))).finish().finish();
     }
 
-    private ClassDefinitionBuilderAbstractOption<? extends ClassStructureBuilder<?>> createProxy(MetaClass proxyInterface) {
-        MetaParameterizedType presenterType = getPresenterFromProxy(proxyInterface);
-        MetaType presenterClass = presenterType.getTypeParameters()[0];
+    private ClassDefinitionBuilderAbstractOption<? extends ClassStructureBuilder<?>> createProxy(MetaClass proxyInterface, MetaParameterizedType presenterType, MetaClass presenterClass) {
         MetaClass proxyClass = parameterizedAs(ProxyImpl.class, presenterType);
 
         ClassDefinitionBuilderAbstractOption<? extends ClassStructureBuilder<?>> definitionStaticOption = ClassBuilder.define("org.jboss.errai.ioc.client.BootstrapperImpl." + presenterClass.getName() + "Proxy", proxyClass).publicScope().staticClass();
-      //  definitionStaticOption.implementsInterface(proxyInterface);
+        //  definitionStaticOption.implementsInterface(proxyInterface);
         definitionStaticOption.body().publicConstructor().append(Stmt.loadVariable("presenter").assignValue(createProvider(proxyInterface, presenterClass, presenterType))).finish();
         return definitionStaticOption;
     }
@@ -163,8 +163,9 @@ public class ProxyManagerIOCExtension implements IOCExtensionConfigurator {
     private MetaParameterizedType getPresenterFromProxy(MetaClass proxyInterface) {
         MetaClass[] interfaces = proxyInterface.getInterfaces();
         for (MetaClass anInterface : interfaces) {
-            if (anInterface.asClass().equals(Proxy.class))
+            if (anInterface.asClass().equals(Proxy.class)) {
                 return anInterface.getParameterizedType();
+            }
         }
         return null;
     }

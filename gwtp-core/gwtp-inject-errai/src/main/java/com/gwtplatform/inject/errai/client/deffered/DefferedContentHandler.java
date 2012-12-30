@@ -18,30 +18,31 @@ package com.gwtplatform.inject.errai.client.deffered;
 
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.inject.errai.client.ProxyManager;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import com.gwtplatform.mvp.client.proxy.Proxy;
 import com.gwtplatform.mvp.client.proxy.ProxyImpl;
 import com.gwtplatform.mvp.client.proxy.RevealContentHandler;
+import org.jboss.errai.ioc.client.container.IOC;
 
 public class DefferedContentHandler<P extends Presenter<?, ?>> implements DefferedHandler<P> {
     private final GwtEvent.Type type;
-    private final Class<P> presenterClass;
+    private final Class<? extends Proxy<P>> proxyClass;
 
-    public DefferedContentHandler(GwtEvent.Type type, Class<P> presenterClass) {
+    public DefferedContentHandler(GwtEvent.Type type, Class<? extends Proxy<P>> proxyClass) {
         this.type = type;
-        this.presenterClass = presenterClass;
+        this.proxyClass = proxyClass;
     }
 
     @Override
     public void registerHandler(EventBus eventBus, PlaceManager placeManager) {
-        RevealContentHandler<P> contentHandler = new RevealContentHandler<P>(eventBus, (ProxyImpl<P>) ProxyManager.getPresenterProxy(presenterClass));
+        RevealContentHandler<P> contentHandler = new RevealContentHandler<P>(eventBus, (ProxyImpl<P>) IOC.getBeanManager().lookupBean(proxyClass).getInstance());
         eventBus.addHandler(type, contentHandler);
     }
 
     @Override
-    public Class<P> getPresenterClass() {
-        return presenterClass;
+    public Class<? extends Proxy<P>> getProxyClass() {
+        return proxyClass;
     }
 
     public GwtEvent.Type getType() {

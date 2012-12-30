@@ -18,28 +18,28 @@ package com.gwtplatform.inject.errai.client.deffered;
 
 import com.google.web.bindery.event.shared.Event;
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.inject.errai.client.ProxyManager;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.Proxy;
+import org.jboss.errai.ioc.client.container.IOC;
 
 public class DefferedEventImpl<P extends Presenter<?, ?>> implements DefferedEvent<P> {
-    private final Class<P> presenterClass;
+    private final Class<? extends Proxy<P>> proxyClass;
     private final Event.Type type;
 
-    public DefferedEventImpl(Event.Type type, Class<P> presenterClass) {
+    public DefferedEventImpl(Event.Type type, Class<? extends Proxy<P>> proxyClass) {
         this.type = type;
-        this.presenterClass = presenterClass;
+        this.proxyClass = proxyClass;
     }
 
     @Override
     public void registerEvent(EventBus eventBus, PlaceManager placeManager) {
-        Proxy<P> proxy = ProxyManager.getPresenterProxy(presenterClass);
+        Proxy<P> proxy = IOC.getBeanManager().lookupBean(proxyClass).getInstance();
         eventBus.addHandler(type, proxy);
     }
 
     @Override
-    public Class<P> getPresenterClass() {
-        return presenterClass;
+    public Class<? extends Proxy<P>> getProxyClass() {
+        return proxyClass;
     }
 }

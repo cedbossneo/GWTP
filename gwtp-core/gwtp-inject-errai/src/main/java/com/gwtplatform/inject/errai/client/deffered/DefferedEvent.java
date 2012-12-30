@@ -19,9 +19,10 @@ package com.gwtplatform.inject.errai.client.deffered;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import com.gwtplatform.mvp.client.proxy.Proxy;
 
 public interface DefferedEvent<P extends Presenter<?, ?>> {
     void registerEvent(EventBus eventBus, PlaceManager placeManager);
 
-    Class<P> getPresenterClass();
+    Class<? extends Proxy<P>> getProxyClass();
 }

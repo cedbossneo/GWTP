@@ -17,7 +17,6 @@
 package com.gwtplatform.inject.errai.client.deffered;
 
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.inject.errai.client.ProxyManager;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.proxy.Gatekeeper;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
@@ -35,12 +34,12 @@ import org.jboss.errai.ioc.client.container.IOC;
  */
 public class DefferedGateKeeperProxyPlace<P extends Presenter<?, ?>> implements DefferedProxy<P> {
     private final String token;
-    private final Class<P> presenterClass;
+    private final Class<? extends Proxy<P>> proxyClass;
     private final Class<? extends Gatekeeper> gateKeeper;
 
-    public DefferedGateKeeperProxyPlace(String token, Class<P> presenterClass, Class<? extends Gatekeeper> gateKeeper) {
+    public DefferedGateKeeperProxyPlace(String token, Class<? extends  Proxy<P>> proxyClass, Class<? extends Gatekeeper> gateKeeper) {
         this.token = token;
-        this.presenterClass = presenterClass;
+        this.proxyClass = proxyClass;
         this.gateKeeper = gateKeeper;
     }
 
@@ -48,13 +47,13 @@ public class DefferedGateKeeperProxyPlace<P extends Presenter<?, ?>> implements 
         return token;
     }
 
-    public Class<P> getPresenterClass() {
-        return presenterClass;
+    public Class<? extends Proxy<P>> getProxyClass() {
+        return proxyClass;
     }
 
     @Override
     public Proxy makeProxy(EventBus eventBus, PlaceManager placeManager) {
-        return new DynamicGateKeeperProxyPlace<P>(ProxyManager.getPresenterProxy(presenterClass), IOC.getBeanManager().lookupBean(gateKeeper).getInstance(), eventBus, placeManager);
+        return new DynamicGateKeeperProxyPlace<P>(IOC.getBeanManager().lookupBean(proxyClass).getInstance(), IOC.getBeanManager().lookupBean(gateKeeper).getInstance(), eventBus, placeManager);
     }
 
     private class DynamicGateKeeperProxyPlace<P extends Presenter<?, ?>> extends ProxyPlaceImpl<P> {

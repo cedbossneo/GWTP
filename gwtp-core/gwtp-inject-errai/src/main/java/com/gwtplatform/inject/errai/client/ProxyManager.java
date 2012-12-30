@@ -59,11 +59,11 @@ public class ProxyManager {
     static List<DefferedProxy> defferedProxies = new LinkedList<DefferedProxy>();
     static List<DefferedHandler> defferedHandlers = new LinkedList<DefferedHandler>();
     static List<DefferedEvent> defferedEvents = new LinkedList<DefferedEvent>();
-    static Map<Class<? extends Presenter<?, ?>>, Proxy> proxies = new HashMap<Class<? extends Presenter<?, ?>>, Proxy>();
-    static Map<Class<? extends Presenter<?, ?>>, ProxyPlace> proxiesPlaces = new HashMap<Class<? extends Presenter<?, ?>>, ProxyPlace>();
 
-    public static <P extends Presenter<?, ?>> DefferedContentHandler<P> registerHandler(GwtEvent.Type type, Class<P> presenterClass) {
-        DefferedContentHandler<P> handler = new DefferedContentHandler<P>(type, presenterClass);
+    static Map<Class<? extends Proxy<? extends Presenter<?, ?>>>, ProxyPlace> proxiesPlaces = new HashMap<Class<? extends Proxy<? extends Presenter<?, ?>>>, ProxyPlace>();
+
+    public static <P extends Presenter<?, ?>> DefferedContentHandler<P> registerHandler(GwtEvent.Type type, Class<? extends Proxy<P>> proxyClass) {
+        DefferedContentHandler<P> handler = new DefferedContentHandler<P>(type, proxyClass);
         defferedHandlers.add(handler);
         if (instance != null) {
             instance.registerDefferedHandler(handler);
@@ -71,8 +71,8 @@ public class ProxyManager {
         return handler;
     }
 
-    public static <P extends Presenter<?, ?>> DefferedEventImpl<P> registerEvent(Event.Type type, Class<P> presenterClass) {
-        DefferedEventImpl<P> defferedEvent = new DefferedEventImpl<P>(type, presenterClass);
+    public static <P extends Presenter<?, ?>> DefferedEventImpl<P> registerEvent(Event.Type type, Class<? extends Proxy<P>> proxyClass) {
+        DefferedEventImpl<P> defferedEvent = new DefferedEventImpl<P>(type, proxyClass);
         defferedEvents.add(defferedEvent);
         if (instance != null) {
             instance.registerDefferedEvent(defferedEvent);
@@ -80,8 +80,8 @@ public class ProxyManager {
         return defferedEvent;
     }
 
-    public static <P extends Presenter<?, ?>> DefferedProxyPlace<P> registerPlace(String token, Class<P> presenterClass) {
-        DefferedProxyPlace<P> proxyPlace = new DefferedProxyPlace<P>(token, presenterClass);
+    public static <P extends Presenter<?, ?>> DefferedProxyPlace<P> registerPlace(String token, Class<? extends Proxy<P>> proxyClass) {
+        DefferedProxyPlace<P> proxyPlace = new DefferedProxyPlace<P>(token, proxyClass);
         defferedProxies.add(proxyPlace);
         if (instance != null) {
             instance.registerDefferedProxy(proxyPlace);
@@ -89,8 +89,8 @@ public class ProxyManager {
         return proxyPlace;
     }
 
-    public static <P extends Presenter<?, ?>> DefferedGateKeeperProxyPlace<P> registerPlace(String token, Class<P> presenterClass, Class<? extends Gatekeeper> gateKeeper) {
-        DefferedGateKeeperProxyPlace<P> proxyPlace = new DefferedGateKeeperProxyPlace<P>(token, presenterClass, gateKeeper);
+    public static <P extends Presenter<?, ?>> DefferedGateKeeperProxyPlace<P> registerPlace(String token, Class<? extends Proxy<P>> proxyClass, Class<? extends Gatekeeper> gateKeeper) {
+        DefferedGateKeeperProxyPlace<P> proxyPlace = new DefferedGateKeeperProxyPlace<P>(token, proxyClass, gateKeeper);
         defferedProxies.add(proxyPlace);
         if (instance != null) {
             instance.registerDefferedProxy(proxyPlace);
@@ -123,18 +123,12 @@ public class ProxyManager {
     protected void registerDefferedProxy(DefferedProxy defferedProxy) {
         Proxy value = defferedProxy.makeProxy(eventBus, placeManager);
         if (value instanceof ProxyPlace) {
-            proxiesPlaces.put(defferedProxy.getPresenterClass(), (ProxyPlace) value);
-        } else {
-            proxies.put(defferedProxy.getPresenterClass(), value);
+            proxiesPlaces.put(defferedProxy.getProxyClass(), (ProxyPlace) value);
         }
     }
 
-    public static <P extends Presenter<?, ?>> Proxy<P> getPresenterProxy(Class<P> presenterClass) {
-        return proxies.get(presenterClass);
-    }
-
-    public static <P extends Presenter<?, ?>> ProxyPlace<P> getPresenterProxyPlace(Class<P> presenterClass) {
-        return proxiesPlaces.get(presenterClass);
+    public static <P extends Presenter<?, ?>> ProxyPlace<P> getPresenterProxyPlace(Class<Proxy<P>> proxyClass) {
+        return proxiesPlaces.get(proxyClass);
     }
 
     public static <T extends Presenter<?, ?>> void getPresenter(Class<T> persenterClass, NotifyingAsyncCallback<T> notifyingAsyncCallback) {
