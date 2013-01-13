@@ -16,8 +16,8 @@
 
 package com.gwtplatform.samples.nested.client.gin;
 
-import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
-import com.gwtplatform.mvp.client.gin.DefaultModule;
+import com.gwtplatform.inject.gin.client.AbstractPresenterModule;
+import com.gwtplatform.inject.gin.client.DefaultModule;
 import com.gwtplatform.samples.nested.client.GwtpnestedsamplePlaceManager;
 import com.gwtplatform.samples.nested.client.NameTokens;
 import com.gwtplatform.samples.nested.client.presenter.AboutUsPresenter;

@@ -16,10 +16,9 @@
 
 package com.gwtplatform.samples.basicspring.client;
 
-import com.gwtplatform.mvp.client.DelayedBindRegistry;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.gwtplatform.inject.gin.client.DelayedBindRegistry;
 
 /**
  * @author Philippe Beaudoin

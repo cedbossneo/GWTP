@@ -16,11 +16,10 @@
 
 package com.gwtplatform.samples.nested.client;
 
-import com.gwtplatform.mvp.client.DelayedBindRegistry;
-import com.gwtplatform.samples.nested.client.gin.ClientGinjector;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.gwtplatform.inject.gin.client.DelayedBindRegistry;
+import com.gwtplatform.samples.nested.client.gin.ClientGinjector;
 
 /**
  * @author Christian Goudreau

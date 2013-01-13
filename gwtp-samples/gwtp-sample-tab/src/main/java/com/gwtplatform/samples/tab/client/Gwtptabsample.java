@@ -18,8 +18,7 @@ package com.gwtplatform.samples.tab.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-
-import com.gwtplatform.mvp.client.DelayedBindRegistry;
+import com.gwtplatform.inject.gin.client.DelayedBindRegistry;
 import com.gwtplatform.samples.tab.client.gin.ClientGinjector;
 
 /**

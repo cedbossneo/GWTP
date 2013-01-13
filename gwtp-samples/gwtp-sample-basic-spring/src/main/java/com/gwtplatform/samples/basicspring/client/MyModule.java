@@ -16,8 +16,8 @@
 
 package com.gwtplatform.samples.basicspring.client;
 
-import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
-import com.gwtplatform.mvp.client.gin.DefaultModule;
+import com.gwtplatform.inject.gin.client.AbstractPresenterModule;
+import com.gwtplatform.inject.gin.client.DefaultModule;
 
 /**
  * @author Philippe Beaudoin
