@@ -16,11 +16,11 @@
 
 package com.gwtplatform.tester;
 
-import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.gwtplatform.common.client.injector.AsyncProvider;
 
 /**
- * For use in test cases where an {@link AsyncProvider} is required to provide
+ * For use in test cases where an {@link com.gwtplatform.common.client.injector.AsyncProvider} is required to provide
  * an object and the test case needs to provide a mock of the object.
  * <p />
  * Note that the same mock will be returned for every invocation of of {@link #get(AsyncCallback)}
@@ -49,7 +49,7 @@ public class AsyncMockProvider<T> implements AsyncProvider<T> {
   }
 
   /**
-   * Construct a {@link AsyncProvider} that will fail to provide the mock
+   * Construct a {@link com.gwtplatform.common.client.injector.AsyncProvider} that will fail to provide the mock
    * object, and will fail with the specified error.
    *
    * @param error The error to fail with, a {@link Throwable}.

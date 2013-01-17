@@ -25,6 +25,7 @@ import com.gwtplatform.inject.errai.client.deffered.DefferedEventImpl;
 import com.gwtplatform.inject.errai.client.deffered.DefferedGateKeeperProxyPlace;
 import com.gwtplatform.inject.errai.client.deffered.DefferedHandler;
 import com.gwtplatform.inject.errai.client.deffered.DefferedProxy;
+import com.gwtplatform.inject.errai.client.deffered.DefferedProxyImpl;
 import com.gwtplatform.inject.errai.client.deffered.DefferedProxyPlace;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.proxy.Gatekeeper;
@@ -61,6 +62,7 @@ public class ProxyManager {
     static List<DefferedEvent> defferedEvents = new LinkedList<DefferedEvent>();
 
     static Map<Class<? extends Proxy<? extends Presenter<?, ?>>>, ProxyPlace> proxiesPlaces = new HashMap<Class<? extends Proxy<? extends Presenter<?, ?>>>, ProxyPlace>();
+    static Map<Class<? extends Proxy<?>>, Proxy> proxies = new HashMap<Class<? extends Proxy<?>>, Proxy>();
 
     public static <P extends Presenter<?, ?>> DefferedContentHandler<P> registerHandler(GwtEvent.Type type, Class<? extends Proxy<P>> proxyClass) {
         DefferedContentHandler<P> handler = new DefferedContentHandler<P>(type, proxyClass);
@@ -87,6 +89,15 @@ public class ProxyManager {
             instance.registerDefferedProxy(proxyPlace);
         }
         return proxyPlace;
+    }
+
+    public static <P extends Presenter<?, ?>> DefferedProxyImpl<P> registerProxy(Class<? extends Proxy<P>> proxyClass) {
+        DefferedProxyImpl<P> proxy = new DefferedProxyImpl<P>(proxyClass);
+        defferedProxies.add(proxy);
+        if (instance != null) {
+            instance.registerDefferedProxy(proxy);
+        }
+        return proxy;
     }
 
     public static <P extends Presenter<?, ?>> DefferedGateKeeperProxyPlace<P> registerPlace(String token, Class<? extends Proxy<P>> proxyClass, Class<? extends Gatekeeper> gateKeeper) {
@@ -125,6 +136,8 @@ public class ProxyManager {
         if (value instanceof ProxyPlace) {
             proxiesPlaces.put(defferedProxy.getProxyClass(), (ProxyPlace) value);
         }
+        else
+            proxies.put(defferedProxy.getProxyClass(), value);
     }
 
     public static <P extends Presenter<?, ?>> ProxyPlace<P> getPresenterProxyPlace(Class<Proxy<P>> proxyClass) {
@@ -144,5 +157,9 @@ public class ProxyManager {
         } else {
             notifyingAsyncCallback.onSuccess(bean);
         }
+    }
+
+    public static <P extends Presenter<?, ?>> Proxy<P> getProxy(Class<? extends Proxy<P>> proxyClass) {
+        return proxies.get(proxyClass);
     }
 }

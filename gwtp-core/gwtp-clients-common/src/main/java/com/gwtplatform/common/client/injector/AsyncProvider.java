@@ -26,5 +26,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * To change this template use File | Settings | File Templates.
  */
 public interface AsyncProvider<B> {
-    void get(AsyncCallback<B> asyncCallback);
+    void get(AsyncCallback<? super B> asyncCallback);
 }

@@ -14,26 +14,30 @@
  * the License.
  */
 
-package com.gwtplatform.samples.basicspring.client;
+package com.gwtplatform.inject.gin.client;
 
-import com.google.web.bindery.event.shared.EventBus;
-import com.google.gwt.inject.client.GinModules;
-import com.google.gwt.inject.client.Ginjector;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Provider;
 import com.gwtplatform.common.client.injector.AsyncProvider;
-import com.gwtplatform.dispatch.client.gin.DispatchAsyncModule;
-import com.gwtplatform.mvp.client.proxy.PlaceManager;
 
-/**
- * @author Philippe Beaudoin
- */
-@GinModules({DispatchAsyncModule.class, MyModule.class})
-public interface MyGinjector extends Ginjector {
-  EventBus getEventBus();
+import javax.inject.Inject;
 
-  Provider<MainPagePresenter> getMainPagePresenter();
+public class AsyncProviderImpl<T> implements AsyncProvider<T> {
+    @Inject
+    Provider<T> provider;
 
-  PlaceManager getPlaceManager();
+    @Override
+    public void get(final AsyncCallback<? super T> asyncCallback) {
+        GWT.runAsync(new RunAsyncCallback() {
+            public void onSuccess() {
+                asyncCallback.onSuccess(provider.get());
+            }
 
-  AsyncProvider<ResponsePresenter> getResponsePresenter();
+            public void onFailure(Throwable ex) {
+                asyncCallback.onFailure(ex);
+            }
+        });
+    }
 }

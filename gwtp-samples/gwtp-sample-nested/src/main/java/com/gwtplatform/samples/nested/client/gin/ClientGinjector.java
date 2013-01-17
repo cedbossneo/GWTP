@@ -17,10 +17,10 @@
 package com.gwtplatform.samples.nested.client.gin;
 
 import com.google.web.bindery.event.shared.EventBus;
-import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
 import com.google.inject.Provider;
+import com.gwtplatform.common.client.injector.AsyncProvider;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.samples.nested.client.presenter.AboutUsPresenter;
 import com.gwtplatform.samples.nested.client.presenter.ContactPresenter;

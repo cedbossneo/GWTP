@@ -16,8 +16,8 @@
 
 package com.gwtplatform.samples.tab.client.gin;
 
-import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.inject.client.GinModules;
+import com.gwtplatform.common.client.injector.AsyncProvider;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.samples.tab.client.MyConstants;
 import com.gwtplatform.samples.tab.client.presenter.AdminAreaPresenter;

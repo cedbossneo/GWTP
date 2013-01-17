@@ -29,7 +29,7 @@ public class AsyncProviderImpl<B> implements AsyncProvider<B> {
     }
 
     @Override
-    public void get(AsyncCallback<B> asyncCallback) {
+    public void get(AsyncCallback<? super B> asyncCallback) {
         IOCBeanDef<B> tiocBeanDef = IOC.getBeanManager().lookupBean(providerClass);
         if (tiocBeanDef == null) {
             asyncCallback.onFailure(new Throwable("Bean definition not found"));
